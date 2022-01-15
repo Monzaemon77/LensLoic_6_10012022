@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Monzaemon77/LensLoic_6_10012022/issues"
   },
-  "homepage": "https://github.com/Monzaemon77/LensLoic_6_10012022#readme"
+  "homepage": "https://github.com/Monzaemon77/LensLoic_6_10012022#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
 }
