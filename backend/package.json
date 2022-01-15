@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Monzaemon77/LensLoic_6_10012022.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Monzaemon77/LensLoic_6_10012022/issues"
+  },
+  "homepage": "https://github.com/Monzaemon77/LensLoic_6_10012022#readme"
+}
