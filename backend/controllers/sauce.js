@@ -1,13 +1,18 @@
 const sauce = require("../models/sauce");
+const fs = require("fs");
 
 exports.createSauce = (req, res, next) => {
-  delete req.body.userId;
+  const sauceObjet = JSON.parse(req.body.sauce);
+  delete sauceObjet._id;
   const Sauce = new sauce({
-    ...req.body,
+    ...sauceObjet,
+    imageUrl: `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`,
   });
   Sauce.save()
     .then(() => {
-      res.status(201).json({
+      res.status(200).json({
         message: "Sauce enregistrée !",
       });
     })
@@ -19,21 +24,17 @@ exports.createSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-  const Sauce = new sauce({
-    _id: req.params.id,
-    title: req.body.title,
-    description: req.body.description,
-    imageUrl: req.body.imageUrl,
-    price: req.body.price,
-    userId: req.body.userId,
-  });
+  const sauceObject = req.file
+    ? {
+        ...JSON.parse(req.body.sauce),
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
+      }
+    : { ...req.body };
   sauce
-    .updateOne({ _id: req.params.id }, Sauce)
-    .then(() => {
-      res.status(201).json({
-        message: "Sauce mis à jour avec succes!",
-      });
-    })
+    .updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+    .then(() => res.status(200).json({ message: "Sauce modifié !" }))
     .catch((error) => {
       res.status(400).json({
         error: error,
@@ -43,17 +44,17 @@ exports.modifySauce = (req, res, next) => {
 
 exports.deleteSauce = (req, res, next) => {
   sauce
-    .deleteOne({ _id: req.params.id })
-    .then(() => {
-      res.status(200).json({
-        message: "Sauce supprimé!",
+    .findOne({ _id: req.params.id })
+    .then((sauce) => {
+      const filename = sauce.imageUrl.split("/images/")[1];
+      fs.unlink(`images/${filename}`, () => {
+        sauce
+          .deleteOne({ _id: req.params.id })
+          .then(() => res.status(200).json({ message: "Objet supprimé !" }))
+          .catch((error) => res.status(400).json({ error }));
       });
     })
-    .catch((error) => {
-      res.status(400).json({
-        error: error,
-      });
-    });
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.getOneSauce = (req, res, next) => {
