@@ -1,15 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const sauceRoute = require("./routes/sauce");
 const userRoute = require("./routes/user");
 
 mongoose
-  .connect(
-    "mongodb+srv://Monza:tAOZSJ3TBh5YQgDU@cluster0.a2dzo.mongodb.net/P6Database?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(process.env.SECRET_DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
