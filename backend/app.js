@@ -1,11 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const sauceRoute = require("./routes/sauce");
-const userRoute = require("./routes/user");
 const path = require("path");
 
-const app = express();
-app.use(express.json());
+const sauceRoute = require("./routes/sauce");
+const userRoute = require("./routes/user");
 
 mongoose
   .connect(
@@ -14,6 +12,8 @@ mongoose
   )
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
+
+const app = express();
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -27,6 +27,8 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
